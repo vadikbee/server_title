@@ -2,7 +2,7 @@
 
 import subprocess
 
-# Параметры для генерации тайлов
+# Параметры для генерации тайлов111
 zoom_level = 10
 tile_dir = '/var/lib/mod_tile'
 bbox = '-180,-85,180,85'

@@ -1,34 +1,31 @@
+import osmnx as ox
 import folium
 
-# Создание карты с начальной позицией
-m = folium.Map(location=[51.5074, -0.1278], zoom_start=10)  # Лондон
+# Загружаем данные для Иваново
+place_name = "Ivanovo, Russia"
+graph = ox.graph_from_place(place_name, network_type='all')
 
-# Добавление слоя с тайлами Stamen Terrain
-# Закомментировано, чтобы избежать конфликта с другими слоями
-# folium.TileLayer(
-#     'Stamen Terrain',
-#     attr='Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.'
-# ).add_to(m)
+# Преобразуем граф в координаты для Folium
+nodes, edges = ox.graph_to_gdfs(graph)
 
-# Добавление слоя с тайлами OpenStreetMap
-folium.TileLayer(
-    'OpenStreetMap',
-    attr='Map data & imagery © OpenStreetMap contributors'
-).add_to(m)
+# Получаем центральные координаты карты
+center_lat = nodes['y'].mean()
+center_lon = nodes['x'].mean()
 
-# Добавление слоя с тайлами CartoDB Positron
-# Закомментировано, чтобы избежать конфликта с другими слоями2
-# folium.TileLayer(
-#     'cartodb positron',
-#     attr='&copy; <a href="https://carto.com/attributions">CartoDB</a>'
-# ).add_to(m)
+# Создаём карту с помощью folium
+m = folium.Map(location=[center_lat, center_lon], zoom_start=14)
 
-# Добавление слоя с тайлами Stamen Toner
-# Закомментировано, чтобы избежать конфликта с другими слоями
-# folium.TileLayer(
-#     'Stamen Toner',
-#     attr='Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.'
-# ).add_to(m)
+# Добавляем дороги на карту
+for _, row in edges.iterrows():
+    # Извлекаем координаты рёбер
+    coords = list(row['geometry'].coords)
+    # Преобразуем координаты в формат (lat, lon)
+    lat_lon_coords = [(lat, lon) for lon, lat in coords]
 
-# Сохранение карты в HTML файл
-m.save("map.html")
+    # Добавляем линию на карту
+    folium.PolyLine(lat_lon_coords, color='blue', weight=1.5).add_to(m)
+
+# Сохраняем карту в HTML файл
+m.save('ivanovo_map.html')
+
+print("Map saved as ivanovo_map.html")

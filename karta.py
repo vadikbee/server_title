@@ -17,7 +17,7 @@ folium.TileLayer(
 ).add_to(m)
 
 # Добавление слоя с тайлами CartoDB Positron
-# Закомментировано, чтобы избежать конфликта с другими слоями
+# Закомментировано, чтобы избежать конфликта с другими слоями2
 # folium.TileLayer(
 #     'cartodb positron',
 #     attr='&copy; <a href="https://carto.com/attributions">CartoDB</a>'

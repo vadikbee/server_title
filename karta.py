@@ -42,7 +42,10 @@ def add_water_bodies(place_name, map_obj):
         if row['geometry'].geom_type == 'Polygon':
             folium.Polygon(
                 locations=[(lat, lon) for lon, lat in row['geometry'].exterior.coords],
-                color='blue', fill=True, fill_color='lightblue', fill_opacity=0.5
+                color='blue',         # Контур водоема синего цвета
+                fill=True,            # Включаем заливку
+                fill_color='#CD5C5C',  #  цвет заливки #CD5C5C
+                fill_opacity=0.5      # Прозрачность заливки
             ).add_to(map_obj)
 
 # Функция для добавления подложки (например, Stamen Terrain)
